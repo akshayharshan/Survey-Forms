@@ -1,0 +1,20 @@
+add_filter('forminator_custom_form_submit_errors', function( $submit_errors, $form_id, $field_data_array ) {
+    global $wpdb;
+
+    // Retrieve the email value from the form field
+    $form_email = $field_data_array[1]['value'];
+
+    $sql = $wpdb->prepare(
+        "SELECT COUNT(*)
+        FROM {$wpdb->prefix}frmt_form_entry_meta
+        WHERE meta_value = %s",
+        $form_email
+    );
+
+    $results = $wpdb->get_results($sql);
+
+    if (!empty($results) && $results[0]->{'COUNT(*)'} > 0) {
+        $submit_errors[]['email-1'] = __( 'The email provided already exists.' );
+        return $submit_errors;
+    }
+}, 10, 3 );
