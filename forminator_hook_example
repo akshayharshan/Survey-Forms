@@ -1,3 +1,4 @@
+<?php
 add_filter('forminator_custom_form_submit_errors', function( $submit_errors, $form_id, $field_data_array ) {
     global $wpdb;
 
